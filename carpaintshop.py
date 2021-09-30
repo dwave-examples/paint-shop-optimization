@@ -93,7 +93,8 @@ def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
 
 
 def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2):
-    """Create a CQM object for paint shop optimization problem
+    """Create a BQM object from a CQM assuming that only linear equality
+    constraints are present.
 
     Args:
         cqm: The `dimod.ConstrainedQuadraticModel for paint shop optimization
@@ -101,7 +102,7 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2):
             constraints
 
     Returns:
-        `dimod.ConstraintQuadraticModel`
+        `dimod.BinaryQuadraticModel`
 
     """
     bqm = dimod.BinaryQuadraticModel('BINARY')
@@ -114,10 +115,10 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2):
 def main(num_cars=10, seed=111, profile='test', mode=1,
          num_unique_cars=3, min_colors=None, max_colors=None,
          filename=None, time_limit=None):
-    """Run paint shop optimization demo using CQM solver
+    """Run paint shop optimization demo using the CQM solver
 
     Args:
-        num_cars: The number of unique cars
+        num_cars: The number of cars in the sequence
         seed: The seed for random sequence generation
         problem, or pass a file name to read the sequences of cars or use the
         example problem in https://arxiv.org/pdf/2109.07876.pdf
