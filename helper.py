@@ -27,12 +27,13 @@ def load_from_yml(filename):
     take a look at `data` folder
 
     Args:
-        filename: The name of the data file (use full or relative path)
+        filename (str): The name of the data file (use full or relative path)
 
     Returns:
-        sequence: The sequence of cars as an array
-        k: dictionary with car ensembles as keys and number of cars in each
-            ensemble as values
+          tuple: The first one is an iterable of cars in a sequence. The second
+            returned value is a mapping with cars and number of black colors as
+            keys and values.
+
     """
 
     with open(filename, 'r') as file_handle:
@@ -47,10 +48,11 @@ def load_experiment_from_yml(filename):
     take a look at `benchmark_experiments` folder
 
     Args:
-        filename: The name of the experiment file (use full or relative path)
+        filename (str): The name of the experiment file (use full or
+            relative path)
 
     Returns:
-        The yaml file as a dictionary
+        dict: The yaml file as a dictionary
 
     """
     with open(filename, 'r') as file_handle:
@@ -62,10 +64,10 @@ def bars_plot(sampleset, show=False, save=True, name='image.png'):
     """Create a bar image for a given binary string.
 
     Args:
-        sampleset: `dimod.SampleSet` or a sample-like
-        show: Whether to show the plot (default=False)
-        save: Whether to save the plot (default=True)
-        name: A file name to save the plot (default='image.png')
+        sampleset (dimod.SampleSet): `dimod.SampleSet` or a sample-like
+        show (bool): Whether to show the plot (default=False)
+        save (bool): Whether to save the plot (default=True)
+        name (str): A file name to save the plot (default='image.png')
 
     """
     if isinstance(sampleset, dimod.SampleSet):
