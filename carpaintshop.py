@@ -28,17 +28,18 @@ def get_paint_shop_cqm(sequences, k, mode=1, return_objective=False):
     """Create a CQM object for paint shop optimization problem
 
     Args:
-        sequences: the sequence of cars
-        k: dictionary of number of black colors for each car
-        mode: Mode sets the objective type. If set to 1, it uses
+        sequences (Iterable): the sequence of cars
+        k (dict): dictionary of number of black colors for each car
+        mode (int): Mode sets the objective type. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches
             if mode is set to any other number, it will use the objective in
             https://arxiv.org/pdf/2109.07876.pdf
-        return_objective: A flag to determine if CQM and the objective for the
-            number of switches are returned
+        return_objective (bool): A flag to determine if CQM and the objective
+            for the number of switches are returned
 
     Returns:
-        `dimod.ConstraintQuadraticModel`
+        `dimod.ConstraintQuadraticModel`: A model object for optimization of
+            paint shop color switches
 
     """
     x = [dimod.Binary(i) for i, car in enumerate(sequences)]
@@ -66,16 +67,18 @@ def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
     """Generate a random paint shop problem
 
     Args:
-        num_cars: The number of unique cars
-        seed: The seed for random sequence generation
-        unique_cars: The number of unique cars
-        min_colors: Minimum number of black colors for each car
-        max_colors: Maximum number of black colors for each car (default None,
-            will set the max to a random number at most one less that
-            the number of cars
+        num_cars (int): The number of unique cars
+        seed (int): The seed for random sequence generation
+        unique_cars (int): The number of unique cars
+        min_colors (int): Minimum number of black colors for each car
+        max_colors (int): Maximum number of black colors for each car (default
+            None, will set the max to a random number at most one less that
+            the number of cars)
 
     Returns:
-          tuple
+          tuple: The first one is an iterable of cars in a sequence. The second
+            returned value is a mapping with cars and number of black colors as
+            keys and values.
 
     """
     np.random.seed(seed)
@@ -92,17 +95,18 @@ def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
     return sequence, mapping
 
 
-def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2):
+def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
     """Create a BQM object from a CQM assuming that only linear equality
     constraints are present.
 
     Args:
         cqm: The `dimod.ConstrainedQuadraticModel for paint shop optimization
-        penalty: The strength of penalty coefficient for all the equality
-            constraints
+        penalty (float): The strength of penalty coefficient for all the
+            equality constraints
 
     Returns:
-        `dimod.BinaryQuadraticModel`
+        `dimod.BinaryQuadraticModel`: A BQM model in which the equality
+            constraints are converted to a quadratic objective.
 
     """
     bqm = dimod.BinaryQuadraticModel('BINARY')
@@ -112,28 +116,28 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2):
     return bqm
 
 
-def main(num_cars=10, seed=111, profile='test', mode=1,
+def main(num_cars=10, seed=111, mode=1,
          num_unique_cars=3, min_colors=None, max_colors=None,
-         filename=None, time_limit=None):
+         filename=None, time_limit=None, **config):
     """Run paint shop optimization demo using the CQM solver
 
     Args:
-        num_cars: The number of cars in the sequence
-        seed: The seed for random sequence generation
-        problem, or pass a file name to read the sequences of cars or use the
-        example problem in https://arxiv.org/pdf/2109.07876.pdf
-        profile: For DW developer to switch between test/alpha/prod
+        num_cars (int): The number of unique cars
+        seed (int): The seed for random sequence generation
+        num_unique_cars (int): The number of unique cars
+        min_colors (int): Minimum number of black colors for each car
+        max_colors (int): Maximum number of black colors for each car (default
+            None, will set the max to a random number at most one less that
+            the number of cars)
         mode: Mode sets the objective type. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches
             if mode is set to any other number, it will use the objective in
             https://arxiv.org/pdf/2109.07876.pdf
-        num_unique_cars: The number of unique cars
-        min_colors: Minimum number of black colors for each car
-        max_colors: Maximum number of black colors for each car (default None,
-            will set the max to a random number at most one less that
-            the number of cars
-        filename: The name of sequence file
+        filename: The name of sequence file in yaml form. If used,
+            the parameters of random sequence generation will be ignored.
         time_limit: time_limit parameter for hybrid solver
+        **config:
+            Keyword arguments passed to :meth:`dwave.cloud.client.Client.from_config`.
 
     """
     if filename is None:
@@ -145,21 +149,22 @@ def main(num_cars=10, seed=111, profile='test', mode=1,
 
     cqm, num_switches = get_paint_shop_cqm(sequence, mapping, mode,
                                            return_objective=True)
-    sampler = LeapHybridCQMSampler(profile=profile)
+    sampler = LeapHybridCQMSampler(**config)
+
     min_time_limit = sampler.min_time_limit(cqm)
     if time_limit and time_limit < min_time_limit:
         time_limit = min_time_limit
         warn('Time limit is less than the minimum allowed, '
              f'changing to the minimum allowed {min_time_limit}')
 
-    ss = sampler.sample_cqm(cqm, time_limit=time_limit).aggregate()
+    sampleset = sampler.sample_cqm(cqm, time_limit=time_limit).aggregate()
     num_samples_printed = 3
     if filename is None:
         image_name = f'color_sequence_image'
     else:
         image_name = f'{filename}_color_sequence_image'
     index = 0
-    for sample in ss.samples():
+    for sample in sampleset.samples():
         if cqm.check_feasible(sample):
             print(f'{index + 1:2d}  ', end='')
             print(f'Objective: {cqm.objective.energy(sample): 8.2f}, ', end='')
