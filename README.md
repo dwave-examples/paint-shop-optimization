@@ -19,23 +19,23 @@ Suppose that we have `N` cars in a sequence. Each car can be painted with black 
 
 In the original paper the authors work with spin variables that take the values {-1,1}, we instead work with binary variables with values in {0, 1}. A spin variable `s` can be converted to a binary variable `x` as follows.
 
-![equation](http://latex.codecogs.com/gif.latex?x%20%3D%20%28s%20&plus;%201%29%20/%202)
+![equation](http://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20x%20%3D%20%28s%20&plus;%201%29%20/%202)
 
 We can optimize the number of color switches by counting the number of times the binary value of adjacent cars changes.
 
-![equation](https://latex.codecogs.com/gif.latex?f_1%20%3D%20%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%28x_i%20-%20x_%7Bi&plus;1%7D%29%5E2)
+![equation](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20f_1%20%3D%20%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%28x_i%20-%20x_%7Bi&plus;1%7D%29%5E2)
 
 Alternatively, we can reduce the number of color changes by minimizing a function that rewards (assigns negative value) assigning a similar color to adjacent cars. This function can easily be expressed in terms of spin variables. When two cars in the sequence have the same color, the product of their value is positive and if the colors are different, the product is negative.
 
-![equation](https://latex.codecogs.com/gif.latex?f_2%20%3D%20-%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%20s_i%20s_%7Bi&plus;1%7D)
+![equation](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20f_2%20%3D%20-%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%20s_i%20s_%7Bi&plus;1%7D)
 
 equivalently, the equation above can be written as
 
-![equation](https://latex.codecogs.com/gif.latex?f_2%20%3D%20-%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%20%282x_i%20-%201%29%20%282x_%7Bi&plus;1%7D-1%29)
+![equation](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20f_2%20%3D%20-%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%20%282x_i%20-%201%29%20%282x_%7Bi&plus;1%7D-1%29)
 
 You can show that the number of color switches is related to the objective function that maximized the number of similar adjacent colors as shown below
 
-![equation](https://latex.codecogs.com/gif.latex?N%20-%201%20&plus;%20f_2%20%3D%202%20f_1)
+![equation](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20N%20-%201%20&plus;%20f_2%20%3D%202%20f_1)
 
 
 ### Constraints
@@ -43,7 +43,7 @@ The sequence of `N` cars has `M` unique cars. Each unique car appears in the seq
 
 The equation below represents the constraint that the sum over the cars of ensemble `j` should equal the number of cars that should be painted black `N_j`.
 
-![equation](https://latex.codecogs.com/gif.latex?%5Csum_%7Bi%5Cin%20C_j%7D%20x_i%20%3D%20N_j%20%7E%7E%7E%20%5Cforall%20j)
+![equation](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20%5Csum_%7Bi%5Cin%20C_j%7D%20x_i%20%3D%20N_j%20%7E%7E%7E%20%5Cforall%20j)
 
 ## Model creation
 
