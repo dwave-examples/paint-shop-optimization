@@ -14,6 +14,7 @@ The formulation of this optimization problem can be summarized as:
 1) Minimize the number of color changes
 2) Ensuring that the correct number of cars are colored white/black
 
+### Objective
 Suppose that we have `N` cars in a sequence. Each car can be painted with black or white color. The goal of the optimization is to reduce the number of times color switches since there is a cost and waste associated with replacing the color.
 
 In the original paper the authors work with spin variables that take the values {-1,1}, we instead work with binary variables with values in {0, 1}. A spin variable `s` can be converted to a binary variable `x` as follows.
@@ -35,6 +36,37 @@ equivalently, the equation above can be written as
 You can show that the number of color switches is related to the objective function that maximized the number of similar adjacent colors as shown below
 
 ![equation](https://latex.codecogs.com/gif.latex?N%20-%201%20&plus;%20f_2%20%3D%202%20f_1)
+
+
+### Constraints
+The sequence of `N` cars has `M` unique cars. Each unique car appears in the sequence multiple times. A car may be painted in one or two colors. One way to ensure that each car gets painted the right color is to ensure that for a given car type, the right number of them get painted the color black.
+
+The equation below represents the constraint that the sum over the cars of ensemble `j` should equal the number of cars that should be painted black `N_j`.
+
+![equation](https://latex.codecogs.com/gif.latex?%5Csum_%7Bi%5Cin%20C_j%7D%20x_i%20%3D%20N_j%20%7E%7E%7E%20%5Cforall%20j)
+
+## Model creation
+
+When using the `dimod.ConstraintQuadraticModel`, it's easy to encode the objective and constraints. In particular, using `dimod.Binary` we can create each objective using symbolic operations.
+
+Let's define `x` as the list of binary variables `x[0] = dimod.Binary(0)` to `x[9] = dimod.Binary(9)` for 10 cars in a sequence. We can compute the number of color changes by looking at the difference of adjacent cars. For example, `x1-x0` gives us the difference of `+1` or `-1` or `0`. Since only the value of `0` is desired, we can optimize the square of the difference. The objective function for the first pair of adjacent variables is
+
+```python
+import dimod
+x = list(dimod.Binaries(range(10)))
+objective = 0
+for i in range(9):
+    objective += (x[i + 1] - x[i]) ** 2
+
+cqm = dimod.ConstrainedQuadraticModel()
+cqm.set_objective(objective)
+```
+
+Note that the operators `-`, and `**` can be used with variables `x`. We can then add this objective to a `dimod.ConstraintQuadraticModel` object.
+
+
+## Output
+The script `carpaintshop.py` creates and solves an optimization problem given input or given parameters of a random problem. After creating the optimization problem, it sends it to the CQM solver (`LeapHybridCQMSampler`). The output of the sampler is processed and the three best feasible solutions are printed. The objective function and the number of color switches are printed. Note that if the `mode=1` is selected, the objective and number of switches are equal. After the script is complete, you'll also find an image for each of the solutions. The image contains a strip of white or black for each color stacked together horizontally.
 
 
 ## Usage
