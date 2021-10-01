@@ -22,19 +22,19 @@ In the original paper the authors work with spin variables that take the values 
 
 We can optimize the number of color switches by counting the number of times the binary value of adjacent cars changes.
 
-<img src="https://latex.codecogs.com/gif.latex?f_1 = \sum_{i=0}^{i=N-2}(x_i - x_{i+1})^2" />
+![equation](https://latex.codecogs.com/gif.latex?f_1%20%3D%20%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%28x_i%20-%20x_%7Bi&plus;1%7D%29%5E2)
 
 Alternatively, we can reduce the number of color changes by minimizing a function that rewards (assigns negative value) assigning a similar color to adjacent cars. This function can easily be expressed in terms of spin variables. When two cars in the sequence have the same color, the product of their value is positive and if the colors are different, the product is negative.
 
-<img src="https://latex.codecogs.com/gif.latex?f_2 = -\sum_{i=0}^{i=N-2} s_i s_{i+1}" />
+![equation](https://latex.codecogs.com/gif.latex?f_2%20%3D%20-%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%20s_i%20s_%7Bi&plus;1%7D)
 
 equivalently, the equation above can be written as
 
-<img src="https://latex.codecogs.com/gif.latex?f_2 = -\sum_{i=0}^{i=N-2} (2x_i - 1) (2x_{i+1}-1)" />
+![equation](https://latex.codecogs.com/gif.latex?f_2%20%3D%20-%5Csum_%7Bi%3D0%7D%5E%7Bi%3DN-2%7D%20%282x_i%20-%201%29%20%282x_%7Bi&plus;1%7D-1%29)
 
 You can show that the number of color switches is related to the objective function that maximized the number of similar adjacent colors as shown below
 
-<img src="https://latex.codecogs.com/gif.latex?N - 1 + f_2 = 2 f_1" />
+![equation](https://latex.codecogs.com/gif.latex?N%20-%201%20&plus;%20f_2%20%3D%202%20f_1)
 
 
 ## Usage
