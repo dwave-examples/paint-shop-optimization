@@ -18,7 +18,7 @@ Suppose that we have `N` cars in a sequence. Each car can be painted with black 
 
 In the original paper the authors work with spin variables that take the values {-1,1}, we instead work with binary variables with values in {0, 1}. A spin variable `s` can be converted to a binary variable `x` as follows.
 
-<img src="https://latex.codecogs.com/gif.latex?x = (s + 1) / 2" />
+<img src="https://latex.codecogs.com/gif.latex?x%20%3D%20%28s%20&plus;%201%29%20/%202" />
 
 We can optimize the number of color switches by counting the number of times the binary value of adjacent cars changes.
 
