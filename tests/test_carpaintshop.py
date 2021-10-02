@@ -19,6 +19,7 @@ from carpaintshop import get_paint_shop_cqm, get_random_sequence
 from carpaintshop import get_paint_shop_bqm
 from helper import bars_plot, load_from_yml, load_experiment_from_yml
 import uuid
+import dimod
 
 # Add the parent path so that the test file can be run as a script in
 # addition to using "python -m unittest" from the root directory
@@ -158,6 +159,24 @@ class TestHelper(unittest.TestCase):
         full_path = os.path.join('images', filename + '.png')
         self.assertTrue(os.path.exists(full_path))
         os.remove(full_path)
+
+    def test_image_array_saved_no_folder(self):
+        filename = str(uuid.uuid4())
+        folder = str(uuid.uuid4())
+        if os.path.exists(folder):
+            os.rmdir(folder)
+        bars_plot([0, 1, 1, 1, 0, 0, 1], show=False, save=True,
+                  name=filename, folder_name=folder)
+        full_path = os.path.join(folder, filename + '.png')
+        self.assertTrue(os.path.exists(full_path))
+        os.remove(full_path)
+        os.rmdir(folder)
+
+    def test_image_sampleset(self):
+        filename = str(uuid.uuid4())
+        sampleset = dimod.SampleSet.from_samples(
+            [{0: 0, 1: 1, 2: 0, 3: 1}], 'BINARY', energy=[0])
+        bars_plot(sampleset, show=False, save=False)
 
     def test_load_yaml(self):
         load_from_yml('data/exp.yml')
