@@ -62,7 +62,8 @@ def load_experiment_from_yml(filename):
     return data
 
 
-def bars_plot(sampleset, show=False, save=True, name='image.png'):
+def bars_plot(sampleset, show=False, save=True, name='image.png',
+              folder_name=None):
     """Create a bar image for a given binary string.
 
     Args:
@@ -70,8 +71,11 @@ def bars_plot(sampleset, show=False, save=True, name='image.png'):
         show (bool): Whether to show the plot (default=False)
         save (bool): Whether to save the plot (default=True)
         name (str): A file name to save the plot (default='image.png')
+        folder_name (str): The folder to save images (default=None)
 
     """
+    if folder_name is None:
+        folder_name = _folder_name
     if isinstance(sampleset, dimod.SampleSet):
         sample = sampleset.first.sample
         sample = [sample[v] for v in sampleset.variables]
@@ -85,10 +89,10 @@ def bars_plot(sampleset, show=False, save=True, name='image.png'):
     plt.imshow(np.repeat(sample, width).reshape(-1, width).T, cmap='gray')
     plt.yticks([])
     if save:
-        if not os.path.exists(_folder_name):
-            os.makedirs(_folder_name)
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
         filename = os.path.basename(name)
-        plt.savefig(os.path.join(_folder_name, filename))
+        plt.savefig(os.path.join(folder_name, filename))
     if show:
         plt.show()
 
