@@ -21,6 +21,7 @@ import os
 
 
 _golden_ratio = (1 + 5 ** 0.5) / 2
+_folder_name = 'images'
 
 
 def load_from_yml(filename):
@@ -84,8 +85,10 @@ def bars_plot(sampleset, show=False, save=True, name='image.png'):
     plt.imshow(np.repeat(sample, width).reshape(-1, width).T, cmap='gray')
     plt.yticks([])
     if save:
+        if not os.path.exists(_folder_name):
+            os.makedirs(_folder_name)
         filename = os.path.basename(name)
-        plt.savefig(os.path.join('images', filename))
+        plt.savefig(os.path.join(_folder_name, filename))
     if show:
         plt.show()
 
