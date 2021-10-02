@@ -15,7 +15,7 @@ The formulation of this optimization problem can be summarized as:
 2) Ensuring that the correct number of cars are colored white/black
 
 ### Objective
-Suppose that we have `N` cars in a sequence. Each car can be painted with black or white color. The goal of the optimization is to reduce the number of times color switches since there is a cost and waste associated with replacing the color.
+Suppose that we have `N` cars in a sequence. Each car can be painted with black or white. The goal of the optimization is to reduce the number of times the color switches since there is a cost and waste associated with switching paint.
 
 In the original paper the authors work with spin variables that take the values {-1,1}, we instead work with binary variables with values in {0, 1}. A spin variable `s` can be converted to a binary variable `x` as follows.
 
