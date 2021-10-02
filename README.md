@@ -61,8 +61,7 @@ the objective and number of switches are equal. After the script is complete, yo
 also find an image for each of the solutions. The image contains a strip of white or 
 black for each color stacked together horizontally.
 
-The image will be saved in the same working directory where the python command 
-is executed.
+The images will be saved in the `images` folder.
 
 ![image](assets/exp.yml_color_sequence_image_0_1.png)
 
