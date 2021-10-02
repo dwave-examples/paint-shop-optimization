@@ -16,6 +16,9 @@ import os
 import sys
 import unittest
 from carpaintshop import get_paint_shop_cqm, get_random_sequence
+from carpaintshop import get_paint_shop_bqm
+from helper import bars_plot, load_from_yml, load_experiment_from_yml
+import uuid
 
 # Add the parent path so that the test file can be run as a script in
 # addition to using "python -m unittest" from the root directory
@@ -100,6 +103,67 @@ class TestCarPaintShop(unittest.TestCase):
         self.assertTrue(cqm.check_feasible(sample))
         self.assertAlmostEqual(cqm.objective.energy(sample), 5)
         self.assertAlmostEqual(objective.energy(sample), 5)
+
+    def test_bqm(self):
+        """Verify that the expected solution is obtained"""
+        sequence = [1, 2, 3, 1, 2, 3]
+        counts = {1: 1, 2: 1, 3: 1}
+        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=1,
+                                            return_objective=True)
+        bqm = get_paint_shop_bqm(cqm, penalty=10)
+
+        sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
+        self.assertAlmostEqual(bqm.energy(sample), 1)
+        sample = {0: 1, 1: 1, 2: 1, 3: 1, 4: 0, 5: 0}
+        self.assertAlmostEqual(bqm.energy(sample), 11)
+        sample = {0: 1, 1: 0, 2: 1, 3: 0, 4: 1, 5: 0}
+        self.assertAlmostEqual(bqm.energy(sample), 5)
+
+    def test_bqm_mode2(self):
+        """Verify that the expected solution is obtained"""
+        sequence = [1, 2, 3, 1, 2, 3]
+        counts = {1: 1, 2: 1, 3: 1}
+        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=2,
+                                            return_objective=True)
+        bqm = get_paint_shop_bqm(cqm, penalty=10)
+
+        sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
+        self.assertAlmostEqual(bqm.energy(sample), -3)
+        sample = {0: 1, 1: 1, 2: 1, 3: 1, 4: 0, 5: 0}
+        self.assertAlmostEqual(bqm.energy(sample), 7)
+        sample = {0: 1, 1: 0, 2: 1, 3: 0, 4: 1, 5: 0}
+        self.assertAlmostEqual(bqm.energy(sample), 5)
+
+
+class TestHelper(unittest.TestCase):
+
+    def test_smoke(self):
+        bars_plot({0: 0, 1: 1, 2: 0, 3: 1}, show=False, save=False)
+
+    def test_smoke_array(self):
+        bars_plot([0, 1, 1, 1, 0, 0, 1], show=False, save=False)
+
+    def test_image_saved(self):
+        filename = str(uuid.uuid4())
+        bars_plot({0: 0, 1: 1, 2: 0, 3: 1}, show=False, save=True,
+                  name=filename)
+        full_path = os.path.join('images', filename + '.png')
+        self.assertTrue(os.path.exists(full_path))
+        os.remove(full_path)
+
+    def test_image_array_saved(self):
+        filename = str(uuid.uuid4())
+        bars_plot([0, 1, 1, 1, 0, 0, 1], show=False, save=True,
+                  name=filename)
+        full_path = os.path.join('images', filename + '.png')
+        self.assertTrue(os.path.exists(full_path))
+        os.remove(full_path)
+
+    def test_load_yaml(self):
+        load_from_yml('data/exp.yml')
+
+    def test_load_exp_yaml(self):
+        load_experiment_from_yml('data/exp.yml')
 
 
 if __name__ == '__main__':
