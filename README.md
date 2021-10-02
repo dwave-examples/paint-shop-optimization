@@ -41,7 +41,7 @@ You can show that the number of color switches is related to the objective funct
 ### Constraints
 The sequence of `N` cars has `M` unique cars. Each unique car appears in the sequence multiple times. A car may be painted in one or two colors. One way to ensure that each car gets painted the right color is to ensure that for a given car type, the right number of them get painted the color black.
 
-The equation below represents the constraint that the sum over the cars of ensemble `j` should equal the number of cars that should be painted black `N_j`.
+The equation below represents the constraint that the sum over the binary variables representing cars of ensemble `j` should equal the number of cars in ensemble `j` that should be painted black (`N_j`).
 
 ![equation](https://latex.codecogs.com/gif.latex?%5Cbg_white%20%5Clarge%20%5Csum_%7Bi%5Cin%20C_j%7D%20x_i%20%3D%20N_j%20%7E%7E%7E%20%5Cforall%20j)
 
