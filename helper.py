@@ -17,6 +17,7 @@ import dimod
 import numpy as np
 import matplotlib.pyplot as plt
 from typing import Mapping
+import os
 
 
 _golden_ratio = (1 + 5 ** 0.5) / 2
@@ -83,7 +84,8 @@ def bars_plot(sampleset, show=False, save=True, name='image.png'):
     plt.imshow(np.repeat(sample, width).reshape(-1, width).T, cmap='gray')
     plt.yticks([])
     if save:
-        plt.savefig(name)
+        filename = os.path.basename(name)
+        plt.savefig(os.path.join('images', filename))
     if show:
         plt.show()
 

@@ -64,14 +64,14 @@ black for each color stacked together horizontally.
 The image will be saved in the same working directory where the python command 
 is executed.
 
-![image](data/exp.yml_color_sequence_image_1_1.png)
+![image](assets/exp.yml_color_sequence_image_0_1.png)
 
 The image above shows that the first four cars (indexed at 0 to 3) and the last 
 four cars (indexed at 10 to 13) are painted black and the rest are painted white. 
 Therefore, there are two color switches. This one of the optimal solutions. The 
 image below shows another optimal solution with two color switches.
 
-![image](data/exp.yml_color_sequence_image_0_1.png)
+![image](assets/exp.yml_color_sequence_image_1_1.png)
 
 
 ## Formulation
