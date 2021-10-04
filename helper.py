@@ -45,6 +45,33 @@ def load_from_yml(filename):
     return sequence, k
 
 
+def save_sequence_to_yaml(sequence, mapping, filename):
+    """Load an experiment configuration from a yaml file. For examples,
+    take a look at `data` folder
+
+    Args:
+        sequence (Iterable): The sequence of cars (iterable)
+        mapping (dict): The mapping of unique car ensembles to the number of
+            black colors
+        filename (str): The name of the data file (use full or relative path)
+
+    """
+    if '.yml' not in filename:
+        filename += '.yml'
+    if isinstance(sequence, np.ndarray):
+        sequence = sequence.tolist()
+
+    if isinstance(next(iter(mapping)), (np.int32, np.int64)):
+        mapping = {int(key): value for key, value in mapping.items()}
+    data = {
+        'sequence': sequence,
+        'counts': mapping
+    }
+    with open(filename, 'w') as file_handle:
+        yaml.dump(data, file_handle)
+        print(f'Saved sequence data to {filename}')
+
+
 def load_experiment_from_yml(filename):
     """Load an experiment configuration from a yaml file. For examples,
     take a look at `benchmark_experiments` folder.

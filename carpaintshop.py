@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 from warnings import warn
 import numpy as np
 import dimod
 from dwave.system import LeapHybridCQMSampler
 from fire import Fire
-from helper import load_from_yml, bars_plot
+from helper import load_from_yml, bars_plot, save_sequence_to_yaml
 
 
 # from Yarkoni et. al "Multi-car paint shop optimization with quantum
@@ -117,6 +118,7 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
 
 def main(num_cars=10, seed=111, mode=1,
          num_car_ensembles=3, min_colors=None, max_colors=None,
+         save_sequence=True, sequence_name=None,
          filename=None, time_limit=None, **config):
     """Run paint shop optimization demo using the CQM solver
 
@@ -128,6 +130,8 @@ def main(num_cars=10, seed=111, mode=1,
         max_colors (int): Maximum number of black colors for each car (default
             None, will set the max to a random number at most one less that
             the number of cars)
+        save_sequence: Flag to save the random sequence to a file
+        sequence_name: The name of the file to save a random sequence
         mode (int): Mode sets the objective type. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches
             if mode is set to any other number, it will use the objective in
@@ -139,10 +143,15 @@ def main(num_cars=10, seed=111, mode=1,
             Keyword arguments passed to :meth:`dwave.cloud.client.Client.from_config`.
 
     """
+    if sequence_name is None:
+        sequence_name = f'sequence_{num_cars}_{num_car_ensembles}_{seed}.yml'
+        sequence_name = os.path.join('data', sequence_name)
     if filename is None:
         sequence, mapping = get_random_sequence(num_cars, seed,
                                                 num_car_ensembles,
                                                 min_colors, max_colors)
+        if save_sequence:
+            save_sequence_to_yaml(sequence, mapping, sequence_name)
     else:
         sequence, mapping = load_from_yml(filename)
 
@@ -154,8 +163,15 @@ def main(num_cars=10, seed=111, mode=1,
     if len(mapping) <= 10:
         print(f'{mapping}')
     else:
-        print('The list of values is too long')
+        if filename:
+            print(f'The sequence data is in {filename}')
+        elif save_sequence:
+            print(f'The sequence data is in {sequence_name}')
+        else:
+            print('The sequence is too long, please save it '
+                  'by passing --save-sequence as argument')
 
+    exit()
     cqm, num_switches = get_paint_shop_cqm(sequence, mapping, mode)
     sampler = LeapHybridCQMSampler(**config)
 
