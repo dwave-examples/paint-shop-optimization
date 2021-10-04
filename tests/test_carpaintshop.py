@@ -37,7 +37,7 @@ class TestCarPaintShop(unittest.TestCase):
         """Verify that the expected solution is obtained"""
         sequence = [1, 2, 3, 1, 2, 3]
         counts = {1: 1, 2: 1, 3: 1}
-        cqm = get_paint_shop_cqm(sequence, counts, mode=1)
+        cqm, _ = get_paint_shop_cqm(sequence, counts, mode=1)
 
         sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
         self.assertTrue(cqm.check_feasible(sample))
@@ -53,7 +53,7 @@ class TestCarPaintShop(unittest.TestCase):
         """Verify that the expected solution is obtained"""
         sequence = [1, 2, 3, 1, 2, 3]
         counts = {1: 1, 2: 1, 3: 1}
-        cqm = get_paint_shop_cqm(sequence, counts, mode=2)
+        cqm, _ = get_paint_shop_cqm(sequence, counts, mode=2)
 
         sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
         self.assertTrue(cqm.check_feasible(sample))
@@ -69,8 +69,7 @@ class TestCarPaintShop(unittest.TestCase):
         """Verify that the expected solution is obtained"""
         sequence = [1, 2, 3, 1, 2, 3]
         counts = {1: 1, 2: 1, 3: 1}
-        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=1,
-                                            return_objective=True)
+        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=1)
 
         sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
         self.assertTrue(cqm.check_feasible(sample))
@@ -89,8 +88,7 @@ class TestCarPaintShop(unittest.TestCase):
         """Verify that the expected solution is obtained"""
         sequence = [1, 2, 3, 1, 2, 3]
         counts = {1: 1, 2: 1, 3: 1}
-        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=2,
-                                            return_objective=True)
+        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=2)
 
         sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
         self.assertTrue(cqm.check_feasible(sample))
@@ -109,8 +107,7 @@ class TestCarPaintShop(unittest.TestCase):
         """Verify that the expected solution is obtained"""
         sequence = [1, 2, 3, 1, 2, 3]
         counts = {1: 1, 2: 1, 3: 1}
-        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=1,
-                                            return_objective=True)
+        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=1)
         bqm = get_paint_shop_bqm(cqm, penalty=10)
 
         sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
@@ -124,8 +121,7 @@ class TestCarPaintShop(unittest.TestCase):
         """Verify that the expected solution is obtained"""
         sequence = [1, 2, 3, 1, 2, 3]
         counts = {1: 1, 2: 1, 3: 1}
-        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=2,
-                                            return_objective=True)
+        cqm, objective = get_paint_shop_cqm(sequence, counts, mode=2)
         bqm = get_paint_shop_bqm(cqm, penalty=10)
 
         sample = {0: 1, 1: 1, 2: 1, 3: 0, 4: 0, 5: 0}
@@ -183,7 +179,3 @@ class TestHelper(unittest.TestCase):
 
     def test_load_exp_yaml(self):
         load_experiment_from_yml('data/exp.yml')
-
-
-if __name__ == '__main__':
-    unittest.main()
