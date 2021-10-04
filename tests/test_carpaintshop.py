@@ -14,12 +14,12 @@
 
 import os
 import sys
+import uuid
+import dimod
 import unittest
 from carpaintshop import get_paint_shop_cqm, get_random_sequence
 from carpaintshop import get_paint_shop_bqm
 from helper import bars_plot, load_from_yml, load_experiment_from_yml
-import uuid
-import dimod
 
 # Add the parent path so that the test file can be run as a script in
 # addition to using "python -m unittest" from the root directory

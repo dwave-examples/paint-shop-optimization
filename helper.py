@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+from typing import Mapping
 import yaml
 import dimod
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import Mapping
-import os
 
 
 _golden_ratio = (1 + 5 ** 0.5) / 2

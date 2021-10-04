@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from warnings import warn
 import numpy as np
 import dimod
 from dwave.system import LeapHybridCQMSampler
 from fire import Fire
-from warnings import warn
 from helper import load_from_yml, bars_plot
 
 
