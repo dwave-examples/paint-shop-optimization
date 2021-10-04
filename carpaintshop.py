@@ -31,8 +31,8 @@ def get_paint_shop_cqm(sequences, k, mode=1, return_objective=False):
         sequences (Iterable): the sequence of cars
         k (dict): dictionary of number of black colors for each car
         mode (int): Mode sets the objective type. If set to 1, it uses
-            (x_i+1 - x_i)^2 as the objective to count the number of switches
-            if mode is set to any other number, it will use the objective in
+            (x_i+1 - x_i)^2 as the objective to count the number of switches.
+           If mode is set to any other number, it will use the objective in
             https://arxiv.org/pdf/2109.07876.pdf
         return_objective (bool): A flag to determine if CQM and the objective
             for the number of switches are returned
