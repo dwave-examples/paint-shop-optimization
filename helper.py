@@ -47,7 +47,9 @@ def load_from_yml(filename):
 
 def load_experiment_from_yml(filename):
     """Load an experiment configuration from a yaml file. For examples,
-    take a look at `benchmark_experiments` folder
+    take a look at `benchmark_experiments` folder.
+
+    TODO: This function will later be used to load benchmarking experiments.
 
     Args:
         filename (str): The name of the experiment file (use full or

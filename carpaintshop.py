@@ -94,6 +94,8 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
     """Create a BQM object from a CQM assuming that only linear equality
     constraints are present.
 
+    TODO: This will later be used for benchmarking with BQM solver.
+
     Args:
         cqm: The `dimod.ConstrainedQuadraticModel for paint shop optimization
         penalty (float): The strength of penalty coefficient for all the
