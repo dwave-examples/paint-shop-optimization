@@ -29,7 +29,7 @@ sys.path.append(example_dir)
 
 class TestCarPaintShop(unittest.TestCase):
     def test_sequence(self):
-        sequence, counts = get_random_sequence(10, unique_cars=5)
+        sequence, counts = get_random_sequence(10, num_car_ensembles=5)
         self.assertEqual(len(sequence), 10)
         self.assertEqual(len(counts), 5)
 

@@ -11,7 +11,7 @@ optimization with quantum annealing".
 In car manufacturing one step of production is painting
 the car body before assembly. A queue of car bodies that enter the paint shop, undergo
 the painting procedure, and exit the paint shop. For all practical purposes, 
-the sequence of cars entering the paint shop is assumed to be fixed queue. 
+the sequence of cars entering the paint shop is assumed to be fixed. 
 However, the colors assigned to the cars within a given sequence can be optimized.
 
 The goal of the optimization is to minimize the number of color switches between 
@@ -25,7 +25,7 @@ the mentioned file is taken from the paper by Yarkoni et. al.
 
 The formulation of this optimization problem can be summarized as:
 1) Minimize the number of color changes
-2) Ensuring that the correct number of cars are colored white/black
+2) Ensure that the correct number of cars are painted white/black
 
 
 ## Usage
@@ -37,7 +37,7 @@ python carpaintshop.py --filename data/exp.yml
 ```
 
 data/exp.yml is a small data set that includes a sequence of cars 
-under `sequence` and the number of black cars to be painted black 
+under `sequence` and the number of cars to be painted black 
 for each car ensemble under `counts`. 
 
 To run the demo on a random instance, run the command:
@@ -110,10 +110,9 @@ function that maximized the number of similar adjacent colors as shown below
 
 
 ### Constraints
-The sequence of `N` cars has `M` unique cars. Each unique car appears in the 
-sequence multiple times. A car may be painted in one or two colors. One way to 
-ensure that each car gets painted the right color is to ensure that for a given 
-car type, the right number of them get painted the color black.
+The sequence of `N` cars has `M` car ensembles (`M < N`). For each car ensembles we 
+want to make sure that the correct number of them are painted black (and the remaining 
+ones are painted white). 
 
 The equation below represents the constraint that the sum over the binary 
 variables representing cars of ensemble `j` should equal the number of cars 

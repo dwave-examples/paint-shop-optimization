@@ -57,18 +57,18 @@ def get_paint_shop_cqm(sequence, k, mode=1):
     return cqm, num_switches
 
 
-def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
+def get_random_sequence(num_cars=5, seed=111, num_car_ensembles=8,
                         min_colors=None, max_colors=None):
     """Generate a random paint shop problem
 
     Args:
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
-        unique_cars (int): The number of unique cars
-        min_colors (int): Minimum number of black colors for each car
-        max_colors (int): Maximum number of black colors for each car (default
-            None, will set the max to a random number at most one less that
-            the number of cars)
+        num_car_ensembles (int): The number of cars ensembles
+        min_colors (int): Minimum number of black colors for each car ensemble
+        max_colors (int): Maximum number of black colors for each car ensemble
+        (default None, will set the max to a random number at most one less
+        that the number of cars)
 
     Returns:
           tuple: The first one is an iterable of cars in a sequence. The second
@@ -77,7 +77,7 @@ def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
 
     """
     np.random.seed(seed)
-    sequence = np.random.randint(0, unique_cars, size=num_cars)
+    sequence = np.random.randint(0, num_car_ensembles, size=num_cars)
     unique, counts = np.unique(sequence, return_counts=True)
     counts = dict(zip(unique, counts))
     mapping = {}
@@ -114,14 +114,14 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
 
 
 def main(num_cars=10, seed=111, mode=1,
-         num_unique_cars=3, min_colors=None, max_colors=None,
+         num_car_ensembles=3, min_colors=None, max_colors=None,
          filename=None, time_limit=None, **config):
     """Run paint shop optimization demo using the CQM solver
 
     Args:
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
-        num_unique_cars (int): The number of unique cars
+        num_car_ensembles (int): The number of car ensembles
         min_colors (int): Minimum number of black colors for each car
         max_colors (int): Maximum number of black colors for each car (default
             None, will set the max to a random number at most one less that
@@ -139,7 +139,7 @@ def main(num_cars=10, seed=111, mode=1,
     """
     if filename is None:
         sequence, mapping = get_random_sequence(num_cars, seed,
-                                                num_unique_cars,
+                                                num_car_ensembles,
                                                 min_colors, max_colors)
     else:
         sequence, mapping = load_from_yml(filename)
