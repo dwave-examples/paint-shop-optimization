@@ -170,7 +170,7 @@ def main(num_cars=10, seed=111, mode=1,
     else:
         image_name = f'{filename}_color_sequence_image'
 
-    print('Solutions')
+    print('\nSolutions')
     print('---------')
     if len(sampleset) == 0:
         print('No feasible solution found.')
