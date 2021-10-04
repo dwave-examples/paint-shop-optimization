@@ -24,25 +24,23 @@ from helper import load_from_yml, bars_plot
 # annealing: "https://arxiv.org/pdf/2109.07876.pdf
 
 
-def get_paint_shop_cqm(sequences, k, mode=1, return_objective=False):
+def get_paint_shop_cqm(sequence, k, mode=1):
     """Create a CQM object for paint shop optimization problem
 
     Args:
-        sequences (Iterable): the sequence of cars
+        sequence (Iterable): the sequence of cars
         k (dict): dictionary of number of black colors for each car
         mode (int): Mode sets the objective type. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches.
            If mode is set to any other number, it will use the objective in
             https://arxiv.org/pdf/2109.07876.pdf
-        return_objective (bool): A flag to determine if CQM and the objective
-            for the number of switches are returned
 
     Returns:
         `dimod.ConstraintQuadraticModel`: A model object for optimization of
             paint shop color switches
 
     """
-    x = [dimod.Binary(i) for i, car in enumerate(sequences)]
+    x = [dimod.Binary(i) for i, car in enumerate(sequence)]
     cqm = dimod.ConstrainedQuadraticModel()
     num_switches = dimod.quicksum(
         (x[i + 1] - x[i]) ** 2 for i in range(len(x) - 1))
@@ -53,13 +51,10 @@ def get_paint_shop_cqm(sequences, k, mode=1, return_objective=False):
             -(2 * x[i] - 1) * (2 * x[i + 1] - 1) for i in range(len(x) - 1)))
 
     for car, number in k.items():
-        index = [i for i, c in enumerate(sequences) if c == car]
+        index = [i for i, c in enumerate(sequence) if c == car]
         constraint = dimod.quicksum(x[i] for i in index)
         cqm.add_constraint(constraint == number)
-    if return_objective:
-        return cqm, num_switches
-    else:
-        return cqm
+    return cqm, num_switches
 
 
 def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
@@ -67,7 +62,7 @@ def get_random_sequence(num_cars=5, seed=111, unique_cars=8,
     """Generate a random paint shop problem
 
     Args:
-        num_cars (int): The number of unique cars
+        num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
         unique_cars (int): The number of unique cars
         min_colors (int): Minimum number of black colors for each car
@@ -124,7 +119,7 @@ def main(num_cars=10, seed=111, mode=1,
     """Run paint shop optimization demo using the CQM solver
 
     Args:
-        num_cars (int): The number of unique cars
+        num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
         num_unique_cars (int): The number of unique cars
         min_colors (int): Minimum number of black colors for each car
@@ -149,8 +144,17 @@ def main(num_cars=10, seed=111, mode=1,
     else:
         sequence, mapping = load_from_yml(filename)
 
-    cqm, num_switches = get_paint_shop_cqm(sequence, mapping, mode,
-                                           return_objective=True)
+    print('Problem')
+    print('-------')
+    print(f'Number of cars: {len(sequence)}')
+    print(f'Number of unique cars ensembles: {len(mapping)}')
+    print(f'Number of cars need to be painted black: ')
+    if len(mapping) <= 10:
+        print(f'{mapping}')
+    else:
+        print('The list of values is too long')
+
+    cqm, num_switches = get_paint_shop_cqm(sequence, mapping, mode)
     sampler = LeapHybridCQMSampler(**config)
 
     min_time_limit = sampler.min_time_limit(cqm)
@@ -160,22 +164,27 @@ def main(num_cars=10, seed=111, mode=1,
              f'changing to the minimum allowed {min_time_limit}')
 
     sampleset = sampler.sample_cqm(cqm, time_limit=time_limit).aggregate()
-    num_samples_printed = 3
+    sampleset = sampleset.filter(lambda x: cqm.check_feasible(x.sample))
     if filename is None:
         image_name = f'color_sequence_image'
     else:
         image_name = f'{filename}_color_sequence_image'
-    index = 0
-    for sample in sampleset.samples():
-        if cqm.check_feasible(sample):
-            print(f'{index + 1:2d}  ', end='')
-            print(f'Objective: {cqm.objective.energy(sample): 8.2f}, ', end='')
-            print(f'Number of switches: {num_switches.energy(sample): 8.2f}')
-            bars_plot(sample,
-                      name=image_name + f'_{index}_{mode}.png')
-            index += 1
-        if index >= num_samples_printed:
-            break
+
+    print('Solutions')
+    print('---------')
+    if len(sampleset) == 0:
+        print('No feasible solution found.')
+    else:
+        sampleset = sampleset.truncate(3)
+        for index, sample in enumerate(sampleset.samples()):
+            if cqm.check_feasible(sample):
+                print(f'{index + 1:}  ')
+                print(f'Objective: '
+                      f'{cqm.objective.energy(sample): 8.2f}, ', end='')
+                print(f'Number of switches: '
+                      f'{num_switches.energy(sample): 8.2f}')
+                bars_plot(sample,
+                          name=image_name + f'_{index}_{mode}.png')
 
 
 if __name__ == '__main__':
