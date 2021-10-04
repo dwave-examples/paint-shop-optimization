@@ -166,12 +166,11 @@ def main(num_cars=10, seed=111, mode=1,
         if filename:
             print(f'The sequence data is in {filename}')
         elif save_sequence:
-            print(f'The sequence data is in {sequence_name}')
+            print(f'The sequence data is saved in {sequence_name}')
         else:
             print('The sequence is too long, please save it '
                   'by passing --save-sequence as argument')
 
-    exit()
     cqm, num_switches = get_paint_shop_cqm(sequence, mapping, mode)
     sampler = LeapHybridCQMSampler(**config)
 
