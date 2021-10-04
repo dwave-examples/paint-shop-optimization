@@ -92,11 +92,8 @@ def bars_plot(sampleset, show=False, save=True, name='image.png',
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
         filename = os.path.basename(name)
-        plt.savefig(os.path.join(folder_name, filename))
+        filename = os.path.join(folder_name, filename)
+        plt.savefig(filename)
+        print(f'Saved solution to {filename}')
     if show:
         plt.show()
-
-
-if __name__ == '__main__':
-    bars_plot({0: 1.0, 1: 1.0, 2: 1.0, 3: 1.0, 4: 0.0, 5: 0.0, 6: 0.0, 7: 0.0,
-               8: 0.0, 9: 0.0, 10: 1.0, 11: 1.0, 12: 1.0, 13: 1.0})
