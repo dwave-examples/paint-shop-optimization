@@ -126,10 +126,10 @@ def main(num_cars=10, seed=111, mode=1,
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
         num_car_ensembles (int): The number of car ensembles
-        min_colors (int): Minimum number of black colors for each car
-        max_colors (int): Maximum number of black colors for each car (default
-            None, will set the max to a random number at most one less that
-            the number of cars)
+        min_colors (int): Minimum number of black colors for each car ensemble
+        max_colors (int): Maximum number of black colors for each car ensemble
+        (default None, will set the max to a random number at most one less
+        that the number of cars)
         save_sequence: Flag to save the random sequence to a file
         sequence_name: The name of the file to save a random sequence
         mode (int): Mode sets the objective type. If set to 1, it uses
