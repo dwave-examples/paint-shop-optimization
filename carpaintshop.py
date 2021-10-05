@@ -118,7 +118,7 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
 
 def main(num_cars=10, seed=111, mode=1,
          num_car_ensembles=3, min_colors=None, max_colors=None,
-         save_sequence=True, sequence_name=None,
+         save_sequence=False, sequence_name=None,
          filename=None, time_limit=None, **config):
     """Run paint shop optimization demo using the CQM solver
 
