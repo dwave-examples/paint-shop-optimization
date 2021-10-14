@@ -31,9 +31,9 @@ def get_paint_shop_cqm(sequence, k, mode=1):
     Args:
         sequence (Iterable): the sequence of cars
         k (dict): dictionary of number of black colors for each car
-        mode (int): Mode sets the objective type. If set to 1, it uses
+        mode (int): Selects the formulation of the objective. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches.
-           If mode is set to any other number, it will use the objective in
+            If mode is set to any other number, it uses the objective in
             https://arxiv.org/pdf/2109.07876.pdf
 
     Returns:
@@ -59,17 +59,19 @@ def get_paint_shop_cqm(sequence, k, mode=1):
 
 
 def get_random_sequence(num_cars=5, seed=111, num_car_ensembles=8,
-                        min_colors=None, max_colors=None):
+                        min_black=None, max_black=None):
     """Generate a random paint shop problem
 
     Args:
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
-        num_car_ensembles (int): The number of cars ensembles
-        min_colors (int): Minimum number of black colors for each car ensemble
-        max_colors (int): Maximum number of black colors for each car ensemble
-        (default None, will set the max to a random number at most one less
-        that the number of cars)
+        num_car_ensembles (int): The maximum number of cars ensembles
+        min_black (int): Minimum number of black colors for each car ensemble
+            (default None, will set the min to a random number more than 1/3 of
+            the number of cars)
+        max_black (int): Maximum number of black colors for each car ensemble
+            (default None, will set the max to a random number less than 2/3 of
+            the number of cars)
 
     Returns:
           tuple: The first one is an iterable of cars in a sequence. The second
@@ -82,12 +84,12 @@ def get_random_sequence(num_cars=5, seed=111, num_car_ensembles=8,
     unique, counts = np.unique(sequence, return_counts=True)
     counts = dict(zip(unique, counts))
     mapping = {}
-    for car, num_colors in counts.items():
-        a = int(num_colors * 1 / 3) if not min_colors else min_colors
-        b = int(num_colors * 2 / 3) if not max_colors else max_colors
+    for ensemble, cars in counts.items():
+        a = int(cars * 1 / 3) if not min_black else min_black
+        b = int(cars * 2 / 3) if not max_black else max_black
         if b <= a:
             b = a + 1
-        mapping[car] = np.random.randint(a, b)
+        mapping[ensemble] = np.random.randint(a, b)
     return sequence, mapping
 
 
@@ -117,7 +119,7 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
 
 
 def main(num_cars=10, seed=111, mode=1,
-         num_car_ensembles=3, min_colors=None, max_colors=None,
+         num_car_ensembles=3, min_black=None, max_black=None,
          save_sequence=False, sequence_name=None,
          filename=None, time_limit=None, **config):
     """Run paint shop optimization demo using the CQM solver
@@ -125,22 +127,25 @@ def main(num_cars=10, seed=111, mode=1,
     Args:
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
-        num_car_ensembles (int): The number of car ensembles
-        min_colors (int): Minimum number of black colors for each car ensemble
-        max_colors (int): Maximum number of black colors for each car ensemble
-        (default None, will set the max to a random number at most one less
-        that the number of cars)
+        num_car_ensembles (int): The maximum number of cars ensembles
+        min_black (int): Minimum number of black colors for each car ensemble
+            (default None, will set the min to a random number more than 1/3 of
+            the number of cars)
+        max_black (int): Maximum number of black colors for each car ensemble
+            (default None, will set the max to a random number less than 2/3 of
+            the number of cars)
         save_sequence: Flag to save the random sequence to a file
-        sequence_name: The name of the file to save a random sequence
-        mode (int): Mode sets the objective type. If set to 1, it uses
+        sequence_name: File name to use when saving the generated random sequence
+        mode (int): Selects the formulation of the objective. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches
             if mode is set to any other number, it will use the objective in
             https://arxiv.org/pdf/2109.07876.pdf
-        filename (str): The name of sequence file in yaml form. If used,
-            the parameters of random sequence generation will be ignored.
-        time_limit (float): time_limit parameter for hybrid solver
+        filename (str): Name of input YAML file. When specified, parameters for
+            generating a sequence are ignored.
+        time_limit (float): Maximum time, in seconds, the solver is allowed to
+            work on the problem
         **config:
-            Keyword arguments passed to :meth:`dwave.cloud.client.Client.from_config`.
+            Keyword arguments passed to the solver client.
 
     """
     if sequence_name is None:
@@ -149,7 +154,7 @@ def main(num_cars=10, seed=111, mode=1,
     if filename is None:
         sequence, mapping = get_random_sequence(num_cars, seed,
                                                 num_car_ensembles,
-                                                min_colors, max_colors)
+                                                min_black, max_black)
         if save_sequence:
             save_sequence_to_yaml(sequence, mapping, sequence_name)
     else:
@@ -194,14 +199,13 @@ def main(num_cars=10, seed=111, mode=1,
     else:
         sampleset = sampleset.truncate(3)
         for index, sample in enumerate(sampleset.samples()):
-            if cqm.check_feasible(sample):
-                print(f'{index + 1:}  ')
-                print(f'Objective: '
-                      f'{cqm.objective.energy(sample): 8.2f}, ', end='')
-                print(f'Number of switches: '
-                      f'{num_switches.energy(sample): 8.2f}')
-                bars_plot(sample,
-                          name=image_name + f'_{index}_{mode}.png')
+            print(f'{index + 1:}  ')
+            print(f'Objective: '
+                  f'{cqm.objective.energy(sample): 8.2f}, ', end='')
+            print(f'Number of switches: '
+                  f'{num_switches.energy(sample): 8.2f}')
+            bars_plot(sample,
+                      name=image_name + f'_{index}_{mode}.png')
 
 
 if __name__ == '__main__':

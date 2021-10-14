@@ -32,9 +32,9 @@ def load_from_yml(filename):
         filename (str): The name of the data file (use full or relative path)
 
     Returns:
-          tuple: The first one is an iterable of cars in a sequence. The second
-            returned value is a mapping with cars and number of black colors as
-            keys and values.
+          tuple: The first value in the tuple is an iterable of cars in a
+            sequence. The second returned value is a mapping with ensemble and
+            number of black cars as keys and values, respectively.
 
     """
 
