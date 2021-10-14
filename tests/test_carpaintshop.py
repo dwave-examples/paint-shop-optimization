@@ -17,8 +17,8 @@ import sys
 import uuid
 import dimod
 import unittest
-from carpaintshop import get_paint_shop_cqm, get_random_sequence
-from carpaintshop import get_paint_shop_bqm
+from car_paint_shop import get_paint_shop_cqm, get_random_sequence
+from car_paint_shop import get_paint_shop_bqm
 from helper import bars_plot, load_from_yml, load_experiment_from_yml
 from helper import save_sequence_to_yaml
 

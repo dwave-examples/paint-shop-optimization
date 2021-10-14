@@ -30,7 +30,7 @@ def get_paint_shop_cqm(sequence, k, mode=1):
 
     Args:
         sequence (Iterable): the sequence of cars
-        k (dict): dictionary of number of black colors for each car
+        k (dict): dictionary of number of black cars for each ensemble
         mode (int): Selects the formulation of the objective. If set to 1, it uses
             (x_i+1 - x_i)^2 as the objective to count the number of switches.
             If mode is set to any other number, it uses the objective in
@@ -66,10 +66,10 @@ def get_random_sequence(num_cars=5, seed=111, num_car_ensembles=8,
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
         num_car_ensembles (int): The maximum number of cars ensembles
-        min_black (int): Minimum number of black colors for each car ensemble
+        min_black (int): Minimum number of black cars for each ensemble
             (default None, will set the min to a random number more than 1/3 of
             the number of cars)
-        max_black (int): Maximum number of black colors for each car ensemble
+        max_black (int): Maximum number of black cars for each ensemble
             (default None, will set the max to a random number less than 2/3 of
             the number of cars)
 
@@ -128,10 +128,10 @@ def main(num_cars=10, seed=111, mode=1,
         num_cars (int): The number of cars
         seed (int): The seed for random sequence generation
         num_car_ensembles (int): The maximum number of cars ensembles
-        min_black (int): Minimum number of black colors for each car ensemble
+        min_black (int): Minimum number of black cars for each ensemble
             (default None, will set the min to a random number more than 1/3 of
             the number of cars)
-        max_black (int): Maximum number of black colors for each car ensemble
+        max_black (int): Maximum number of black cars for each ensemble
             (default None, will set the max to a random number less than 2/3 of
             the number of cars)
         save_sequence: Flag to save the random sequence to a file
