@@ -163,7 +163,7 @@ def main(num_cars=10, seed=111, mode=1,
     print('Problem')
     print('-------')
     print(f'Number of cars: {len(sequence)}')
-    print(f'Number of unique cars ensembles: {len(mapping)}')
+    print(f'Number of car ensembles: {len(mapping)}')
     print(f'Number of cars to be painted black: ')
     if len(mapping) <= 10:
         print(f'{mapping}')
