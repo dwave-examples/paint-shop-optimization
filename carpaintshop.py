@@ -137,8 +137,8 @@ def main(num_cars=10, seed=111, mode=1,
         save_sequence: Flag to save the random sequence to a file
         sequence_name: File name to use when saving the generated random sequence
         mode (int): Selects the formulation of the objective. If set to 1, it uses
-            (x_i+1 - x_i)^2 as the objective to count the number of switches
-            if mode is set to any other number, it will use the objective in
+            (x_i+1 - x_i)^2 as the objective to count the number of switches.
+            If mode is set to any other number, it will use the objective in
             https://arxiv.org/pdf/2109.07876.pdf
         filename (str): Name of input YAML file. When specified, parameters for
             generating a sequence are ignored.
