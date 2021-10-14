@@ -118,7 +118,7 @@ The following equality shows the equivalence of these two formulations:
 
 ### Constraints
 The sequence of `N` cars has `M` unique car ensembles (`M < N`). For each car 
-ensemble (`C_j`) we want to make sure that the correct number of the car in 
+ensemble (`C_j`) we want to make sure that the correct number of the cars in 
 the ensemble (`N_j`) are painted black (and the remaining ones are painted white). 
 
 The equation below represents the constraint that the sum over the binary 
