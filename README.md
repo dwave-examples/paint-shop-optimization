@@ -97,7 +97,7 @@ The first image shows an example of randomly painting cars in black and white. T
 color switches is 468, which means on average the color changes after painting every two cars.
 ![image](assets/cars_1000_ensembles_30_random.png)
 
-The second image shows the solution to greedy optimization. We start with one color (say black) and 
+The second image shows the solution found with greedy optimization. We start with one color (say black) and 
 we continue to paint with the same color until it becomes infeasible. For example, if we paint 5 of the 
 cars from ensemble one with the color black, and the rest of them need to be painted white, we need
 to switch the color. As you can probably observe, a greedy solution will start great, but in the end, 
