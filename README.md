@@ -78,7 +78,37 @@ This solution has two color switches. The image below shows another optimal solu
 
 ![image](assets/exp.yml_color_sequence_image_1_1.png)
 
+## Baseline Comparison
+To understand the benefits of optimizing the sequence of cars in a paint shop, we study 
+the number of color switches when the sequence is optimized vs two other methods. 
 
+First, we color all cars in each ensemble according to the number of required black and white 
+cars. Then, we place the colors in the sequence randomly. This will produce a random color sequence 
+that also satisfies the constraints.
+
+Another method, which will produce better results, is to color the sequence by starting with the color
+black, and then continuing until we cannot paint a car black (because the number of black cars in that 
+ensemble has reached maximum). At that point, we switch the color and we continue with that color until 
+it's infeasible to use that color again. We also make sure that if the number of cars left in an 
+ensemble equals the number of cars of a certain color, we paint that color, otherwise, the solution will 
+violate the constraints.
+
+The first image shows an example of randomly painting cars in black and white. The number of 
+color switches is 468, which means on average the color changes after painting every two cars.
+![image](assets/cars_1000_ensembles_30_random.png)
+
+The second image shows the solution to greedy optimization. We start with one color (say black) and 
+we continue to paint with the same color until it becomes infeasible. For example, if we paint 5 of the 
+cars from ensemble one with the color black, and the rest of them needs to be painted white, we need
+to switch the color. As you can probably observe, a greedy solution will start great, but in the end, 
+a lot of color switches are needed to satisfy all the constraints. This results in an overall 111 color 
+switch which is much better than a random solution, but far from ideal.
+![image](assets/cars_1000_ensembles_30_greedy.png)
+
+Finally, the solution obtained by `LeapHybridCQMSampler` provides an optimal (or near-optimal) arrangement 
+of color with only 37 switches. It's worth noting that at the beginning there are more color switches than
+the greedy solution, but towards the end of the sequence, the number of color switches is significantly lower.
+![image](assets/cars_1000_ensembles_30_best.png)
 ## Formulation
 ### Objective
 Suppose that we have `N` cars in a sequence. Each car can be painted black or 
