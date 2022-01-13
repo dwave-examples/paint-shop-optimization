@@ -99,7 +99,7 @@ color switches is 468, which means on average the color changes after painting e
 
 The second image shows the solution to greedy optimization. We start with one color (say black) and 
 we continue to paint with the same color until it becomes infeasible. For example, if we paint 5 of the 
-cars from ensemble one with the color black, and the rest of them needs to be painted white, we need
+cars from ensemble one with the color black, and the rest of them need to be painted white, we need
 to switch the color. As you can probably observe, a greedy solution will start great, but in the end, 
 a lot of color switches are needed to satisfy all the constraints. This results in an overall 111 color 
 switch which is much better than a random solution, but far from ideal.
