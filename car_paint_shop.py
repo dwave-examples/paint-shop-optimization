@@ -114,7 +114,7 @@ def get_paint_shop_bqm(cqm: dimod.ConstrainedQuadraticModel, penalty=2.0):
     bqm.add_linear_from(cqm.objective.linear)
     bqm.add_quadratic_from(cqm.objective.quadratic)
     for c in cqm.constraints.values():
-        bqm.update(penalty * (c.lhs - c.rhs) ** 2)
+        bqm += penalty * (c.lhs - c.rhs) ** 2
     return bqm
 
 
